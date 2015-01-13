@@ -32,10 +32,56 @@ public class DistortionRenderer {
 	private float mMetersPerTanAngle;
 	private ProgramHolder mProgramHolder;
 	private ProgramHolderAberration mProgramHolderAberration;
-	static final String VERTEX_SHADER = "attribute vec2 aPosition;\nattribute float aVignette;\nattribute vec2 aBlueTextureCoord;\nvarying vec2 vTextureCoord;\nvarying float vVignette;\nuniform float uTextureCoordScale;\nvoid main() {\n    gl_Position = vec4(aPosition, 0.0, 1.0);\n    vTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;\n    vVignette = aVignette;\n}\n";
-	static final String FRAGMENT_SHADER = "precision mediump float;\nvarying vec2 vTextureCoord;\nvarying float vVignette;\nuniform sampler2D uTextureSampler;\nvoid main() {\n    gl_FragColor = vVignette * texture2D(uTextureSampler, vTextureCoord);\n}\n";
-	static final String VERTEX_SHADER_ABERRATION = "attribute vec2 aPosition;\nattribute float aVignette;\nattribute vec2 aRedTextureCoord;\nattribute vec2 aGreenTextureCoord;\nattribute vec2 aBlueTextureCoord;\nvarying vec2 vRedTextureCoord;\nvarying vec2 vBlueTextureCoord;\nvarying vec2 vGreenTextureCoord;\nvarying float vVignette;\nuniform float uTextureCoordScale;\nvoid main() {\n    gl_Position = vec4(aPosition, 0.0, 1.0);\n    vRedTextureCoord = aRedTextureCoord.xy * uTextureCoordScale;\n    vGreenTextureCoord = aGreenTextureCoord.xy * uTextureCoordScale;\n    vBlueTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;\n    vVignette = aVignette;\n}\n";
-	static final String FRAGMENT_SHADER_ABERRATION = "precision mediump float;\nvarying vec2 vRedTextureCoord;\nvarying vec2 vBlueTextureCoord;\nvarying vec2 vGreenTextureCoord;\nvarying float vVignette;\nuniform sampler2D uTextureSampler;\nvoid main() {\n    gl_FragColor = vVignette * vec4(texture2D(uTextureSampler, vRedTextureCoord).r,\n                    texture2D(uTextureSampler, vGreenTextureCoord).g,\n                    texture2D(uTextureSampler, vBlueTextureCoord).b, 1.0);\n}\n";
+	static final String VERTEX_SHADER = "attribute vec2 aPosition;"
+	 + "attribute float aVignette;"
+	 + "attribute vec2 aBlueTextureCoord;"
+	 + "varying vec2 vTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform float uTextureCoordScale;"
+	 + "void main() {"
+	 + "    gl_Position = vec4(aPosition, 0.0, 1.0);"
+	 + "    vTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;"
+	 + "    vVignette = aVignette;"
+	 + "}"
+	 + "";
+	static final String FRAGMENT_SHADER = "precision mediump float;"
+	 + "varying vec2 vTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform sampler2D uTextureSampler;"
+	 + "void main() {"
+	 + "    gl_FragColor = vVignette * texture2D(uTextureSampler, vTextureCoord);"
+	 + "}"
+	 + "";
+	static final String VERTEX_SHADER_ABERRATION = "attribute vec2 aPosition;"
+	 + "attribute float aVignette;"
+	 + "attribute vec2 aRedTextureCoord;"
+	 + "attribute vec2 aGreenTextureCoord;"
+	 + "attribute vec2 aBlueTextureCoord;"
+	 + "varying vec2 vRedTextureCoord;"
+	 + "varying vec2 vBlueTextureCoord;"
+	 + "varying vec2 vGreenTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform float uTextureCoordScale;"
+	 + "void main() {"
+	 + "    gl_Position = vec4(aPosition, 0.0, 1.0);"
+	 + "    vRedTextureCoord = aRedTextureCoord.xy * uTextureCoordScale;"
+	 + "    vGreenTextureCoord = aGreenTextureCoord.xy * uTextureCoordScale;"
+	 + "    vBlueTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;"
+	 + "    vVignette = aVignette;"
+	 + "}"
+	 + "";
+	static final String FRAGMENT_SHADER_ABERRATION = "precision mediump float;"
+	 + "varying vec2 vRedTextureCoord;"
+	 + "varying vec2 vBlueTextureCoord;"
+	 + "varying vec2 vGreenTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform sampler2D uTextureSampler;"
+	 + "void main() {"
+	 + "    gl_FragColor = vVignette * vec4(texture2D(uTextureSampler, vRedTextureCoord).r,"
+	 + "                    texture2D(uTextureSampler, vGreenTextureCoord).g,"
+	 + "                    texture2D(uTextureSampler, vBlueTextureCoord).b, 1.0);"
+	 + "}"
+	 + "";
 
 	public DistortionRenderer() {
 		super();
@@ -430,8 +476,36 @@ public class DistortionRenderer {
 			holder = new ProgramHolderAberration();
 			holder.program = this
 					.createProgram(
-							"attribute vec2 aPosition;\nattribute float aVignette;\nattribute vec2 aRedTextureCoord;\nattribute vec2 aGreenTextureCoord;\nattribute vec2 aBlueTextureCoord;\nvarying vec2 vRedTextureCoord;\nvarying vec2 vBlueTextureCoord;\nvarying vec2 vGreenTextureCoord;\nvarying float vVignette;\nuniform float uTextureCoordScale;\nvoid main() {\n    gl_Position = vec4(aPosition, 0.0, 1.0);\n    vRedTextureCoord = aRedTextureCoord.xy * uTextureCoordScale;\n    vGreenTextureCoord = aGreenTextureCoord.xy * uTextureCoordScale;\n    vBlueTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;\n    vVignette = aVignette;\n}\n",
-							"precision mediump float;\nvarying vec2 vRedTextureCoord;\nvarying vec2 vBlueTextureCoord;\nvarying vec2 vGreenTextureCoord;\nvarying float vVignette;\nuniform sampler2D uTextureSampler;\nvoid main() {\n    gl_FragColor = vVignette * vec4(texture2D(uTextureSampler, vRedTextureCoord).r,\n                    texture2D(uTextureSampler, vGreenTextureCoord).g,\n                    texture2D(uTextureSampler, vBlueTextureCoord).b, 1.0);\n}\n");
+							"attribute vec2 aPosition;"
+	 + "attribute float aVignette;"
+	 + "attribute vec2 aRedTextureCoord;"
+	 + "attribute vec2 aGreenTextureCoord;"
+	 + "attribute vec2 aBlueTextureCoord;"
+	 + "varying vec2 vRedTextureCoord;"
+	 + "varying vec2 vBlueTextureCoord;"
+	 + "varying vec2 vGreenTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform float uTextureCoordScale;"
+	 + "void main() {"
+	 + "    gl_Position = vec4(aPosition, 0.0, 1.0);"
+	 + "    vRedTextureCoord = aRedTextureCoord.xy * uTextureCoordScale;"
+	 + "    vGreenTextureCoord = aGreenTextureCoord.xy * uTextureCoordScale;"
+	 + "    vBlueTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;"
+	 + "    vVignette = aVignette;"
+	 + "}"
+	 + "",
+							"precision mediump float;"
+	 + "varying vec2 vRedTextureCoord;"
+	 + "varying vec2 vBlueTextureCoord;"
+	 + "varying vec2 vGreenTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform sampler2D uTextureSampler;"
+	 + "void main() {"
+	 + "    gl_FragColor = vVignette * vec4(texture2D(uTextureSampler, vRedTextureCoord).r,"
+	 + "                    texture2D(uTextureSampler, vGreenTextureCoord).g,"
+	 + "                    texture2D(uTextureSampler, vBlueTextureCoord).b, 1.0);"
+	 + "}"
+	 + "");
 			if (holder.program == 0) {
 				throw new RuntimeException(
 						"Could not create aberration-corrected program");
@@ -441,8 +515,26 @@ public class DistortionRenderer {
 			holder = new ProgramHolder();
 			holder.program = this
 					.createProgram(
-							"attribute vec2 aPosition;\nattribute float aVignette;\nattribute vec2 aBlueTextureCoord;\nvarying vec2 vTextureCoord;\nvarying float vVignette;\nuniform float uTextureCoordScale;\nvoid main() {\n    gl_Position = vec4(aPosition, 0.0, 1.0);\n    vTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;\n    vVignette = aVignette;\n}\n",
-							"precision mediump float;\nvarying vec2 vTextureCoord;\nvarying float vVignette;\nuniform sampler2D uTextureSampler;\nvoid main() {\n    gl_FragColor = vVignette * texture2D(uTextureSampler, vTextureCoord);\n}\n");
+							"attribute vec2 aPosition;"
+	 + "attribute float aVignette;"
+	 + "attribute vec2 aBlueTextureCoord;"
+	 + "varying vec2 vTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform float uTextureCoordScale;"
+	 + "void main() {"
+	 + "    gl_Position = vec4(aPosition, 0.0, 1.0);"
+	 + "    vTextureCoord = aBlueTextureCoord.xy * uTextureCoordScale;"
+	 + "    vVignette = aVignette;"
+	 + "}"
+	 + "",
+							"precision mediump float;"
+	 + "varying vec2 vTextureCoord;"
+	 + "varying float vVignette;"
+	 + "uniform sampler2D uTextureSampler;"
+	 + "void main() {"
+	 + "    gl_FragColor = vVignette * texture2D(uTextureSampler, vTextureCoord);"
+	 + "}"
+	 + "");
 			if (holder.program == 0) {
 				throw new RuntimeException("Could not create program");
 			}
@@ -549,19 +641,26 @@ public class DistortionRenderer {
 
 		@Override
 		public String toString() {
-			return "{\n"
+			return "{"
+	 + ""
 					+ new StringBuilder(22).append("  x: ").append(this.x)
-							.append(",\n").toString()
+							.append(","
+	 + "").toString()
 					+ new StringBuilder(22).append("  y: ").append(this.y)
-							.append(",\n").toString()
+							.append(","
+	 + "").toString()
 					+ new StringBuilder(26).append("  width: ")
-							.append(this.width).append(",\n").toString()
+							.append(this.width).append(","
+	 + "").toString()
 					+ new StringBuilder(27).append("  height: ")
-							.append(this.height).append(",\n").toString()
+							.append(this.height).append(","
+	 + "").toString()
 					+ new StringBuilder(25).append("  eyeX: ")
-							.append(this.eyeX).append(",\n").toString()
+							.append(this.eyeX).append(","
+	 + "").toString()
 					+ new StringBuilder(25).append("  eyeY: ")
-							.append(this.eyeY).append(",\n").toString() + "}";
+							.append(this.eyeY).append(","
+	 + "").toString() + "}";
 		}
 	}
 
